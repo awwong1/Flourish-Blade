@@ -10,8 +10,8 @@ public class GameSettings {
     private float sfxVolume;
 
     public GameSettings() {
-        this.bgmVolume = 1.0f;
-        this.sfxVolume = 1.0f;
+        this.bgmVolume = 0.5f;
+        this.sfxVolume = 0.5f;
     }
 
     public static GameSettings loadSettings() {

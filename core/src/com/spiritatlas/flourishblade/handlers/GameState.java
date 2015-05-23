@@ -8,7 +8,7 @@ public class GameState {
 
     public GameState() {
         mapFilePath = "maps/testmap.tmx";
-        characterPosition = new Vector2(7, 27);
+        characterPosition = new Vector2(8, 19);
     }
 
     public String getMapFilePath() {

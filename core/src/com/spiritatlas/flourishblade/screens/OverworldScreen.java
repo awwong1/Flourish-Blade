@@ -4,18 +4,21 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.spiritatlas.flourishblade.FlourishBlade;
 import com.spiritatlas.flourishblade.entities.PlayerEntity;
 import com.spiritatlas.flourishblade.handlers.GameState;
-import com.spiritatlas.flourishblade.util.Physics;
-import com.spiritatlas.flourishblade.util.ResourceLoader;
+import com.spiritatlas.flourishblade.util.*;
 
 public class OverworldScreen extends AbstractScreen {
     private final ResourceLoader resourceLoader;
@@ -24,6 +27,12 @@ public class OverworldScreen extends AbstractScreen {
     private final OrthogonalTiledMapRenderer tiledMapRenderer;
     private final PlayerEntity player;
     private final OrthographicCamera hudCamera;
+
+    private final Touchpad touchpad;
+    private final ComponentMovement movement;
+
+    // TODO: Remove this from the final game
+    public final Box2DDebugRenderer debugRenderer;
 
     public OverworldScreen(final ResourceLoader resources, final FlourishBlade game, final GameState gameState) {
         super(new Stage(new FitViewport(FlourishBlade.V_WIDTH, FlourishBlade.V_HEIGHT)), game);
@@ -39,9 +48,18 @@ public class OverworldScreen extends AbstractScreen {
         player = createPlayer(gameState.getCharacterPosition());
         game.getCamera().following = player;
 
+        touchpad = createTouchpad();
+        stage.addActor(touchpad);
+
+        MapCollisionBuilder.buildShapes(tiledMap, 32, physics.getWorld());
+
+        movement = createMovement();
+
         this.hudCamera = new OrthographicCamera(stage.getWidth(), stage.getHeight());
         hudCamera.viewportWidth = Gdx.graphics.getWidth();
         hudCamera.viewportHeight = Gdx.graphics.getHeight();
+
+        debugRenderer = new Box2DDebugRenderer();
     }
 
     private PlayerEntity createPlayer(Vector2 characterPosition) {
@@ -79,8 +97,35 @@ public class OverworldScreen extends AbstractScreen {
         return new PlayerEntity(body, PlayerEntity.createView(tex));
     }
 
+    private Touchpad createTouchpad() {
+        String touchKnobId = "touchKnob";
+        String touchBackgroundId = "touchBackground";
+
+        Skin touchpadSkin = new Skin();
+
+        touchpadSkin.add(touchBackgroundId, new TextureRegion(resourceLoader.getTexture(ResourceLoader.UI_TEX), 335, 38, 35, 38));
+        touchpadSkin.add(touchKnobId, new TextureRegion(resourceLoader.getTexture(ResourceLoader.UI_TEX), 365, 483, 17, 17));
+
+        Touchpad.TouchpadStyle touchpadStyle = new Touchpad.TouchpadStyle();
+        Drawable touchBackground = touchpadSkin.getDrawable(touchBackgroundId);
+        Drawable touchKnob = touchpadSkin.getDrawable(touchKnobId);
+        touchpadStyle.background = touchBackground;
+        touchpadStyle.knob = touchKnob;
+        Touchpad tpad = new Touchpad(10, touchpadStyle);
+        tpad.setBounds(15, 15, 150, 150);
+        return tpad;
+    }
+
+    private ComponentMovement createMovement() {
+        ComponentMovement movement = new ComponentMovement(Direction.DOWN);
+        movement.set(16, 6, 1.5f);
+        return movement;
+    }
+
     @Override
     public void tick(float delta) {
+        movement.setSteer(touchpad.getKnobPercentX(), touchpad.getKnobPercentY());
+        movement.apply(player);
         physics.step(delta);
         stage.act(delta);
         game.getCamera().update();
@@ -95,6 +140,8 @@ public class OverworldScreen extends AbstractScreen {
         player.getView().draw(spriteBatch, player, Gdx.graphics.getDeltaTime());
         spriteBatch.end();
         drawHUD(spriteBatch);
+
+        debugRenderer.render(physics.getWorld(), game.getCamera().getCamera().combined);
     }
 
     private void drawHUD(SpriteBatch spriteBatch) {
@@ -115,6 +162,7 @@ public class OverworldScreen extends AbstractScreen {
         stage.getViewport().update(width, height);
         hudCamera.viewportWidth = Gdx.graphics.getWidth();
         hudCamera.viewportHeight = Gdx.graphics.getHeight();
+        touchpad.setBounds(15, 15, 150, 150);
     }
 
     @Override
