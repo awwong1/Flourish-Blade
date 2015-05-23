@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="49" height="49" tilewidth="32" tileheight="32" nextobjectid="12">
+ <tileset firstgid="1" name="tile_a2" tilewidth="32" tileheight="32">
+  <image source="../spritesheets/tile_a2.png" width="512" height="384"/>
+ </tileset>
+ <tileset firstgid="193" name="tile_b" tilewidth="32" tileheight="32">
+  <image source="../spritesheets/tile_b.png" width="512" height="512"/>
+ </tileset>
+ <layer name="ground" width="49" height="49">
+  <data encoding="base64" compression="zlib">
+   eJztw0ENAAAMA6Grf9PzsDckrJqqqqqqqqqqqqqvBzAYCWI=
+  </data>
+ </layer>
+ <layer name="nature" width="49" height="49">
+  <data encoding="base64" compression="zlib">
+   eJztmEGKwkAQRTs4MO4Vxr2C3kAPq8McIDoewNGr2Y1pKIskVuMoL1AfPrXJ4j9/dYI9CSF8FHgaeBq9+Pl3yBkYcgaGnIGh0kzzcP+9WPx7onI9+7sSenEGhpyBIT8PDAb9vi814fvwWYUwrh5PspYx37q6zVXPJHPk/GluOiadw9JD5plBGbwHhiw9kPMnteVPeb/UJKttj9Leb6N30d/w/EldPdTR++jDABh0D3lv6mYemz6kad3o907eod+enLRudP6+7Fk0BnmOa2M2GoM+xxbRGLwHhrwHhrwHhmQPp+jLAL9xuYeSfaIx5B5K9onGoHuw7BONQfZg5aAxyB70+f5rrHl+YAyyB/l/Tt5TSp7kM4xh6PeUSZZ7GTqHpQd6H5Ye6PdkV4oqTPY=
+  </data>
+ </layer>
+ <objectgroup name="collision">
+  <object id="11" x="416" y="0">
+   <polyline points="0,0 0,256 128,256 128,352 96,352 96,288 -32,288 -32,32 -384,32 -384,512 96,512 96,448 128,448 128,544 -96,544 -96,576 -32,640 -64,672 -32,704 -128,800 -128,864 32,864 32,1376 0,1376 0,896 -128,896 -160,864 -160,832 -192,832 -192,896 -224,928 -256,928 -288,960 -288,1216 -256,1248 -256,1312 -224,1344 -192,1376 -128,1376 -96,1408 32,1408 32,1440 -128,1440 -32,1536 -32,1568 1152,1568 1152,0 0,0"/>
+  </object>
+ </objectgroup>
+</map>
