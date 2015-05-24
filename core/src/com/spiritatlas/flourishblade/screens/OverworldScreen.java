@@ -5,17 +5,18 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.spiritatlas.flourishblade.FlourishBlade;
+import com.spiritatlas.flourishblade.entities.FringeLayer;
+import com.spiritatlas.flourishblade.entities.Map;
 import com.spiritatlas.flourishblade.entities.PlayerEntity;
 import com.spiritatlas.flourishblade.handlers.GameState;
 import com.spiritatlas.flourishblade.util.*;
@@ -23,8 +24,7 @@ import com.spiritatlas.flourishblade.util.*;
 public class OverworldScreen extends AbstractScreen {
     private final ResourceLoader resourceLoader;
     private final Physics physics;
-    private final TiledMap tiledMap;
-    private final OrthogonalTiledMapRenderer tiledMapRenderer;
+    private final Map map;
     private final PlayerEntity player;
     private final OrthographicCamera hudCamera;
 
@@ -39,19 +39,13 @@ public class OverworldScreen extends AbstractScreen {
         this.resourceLoader = resources;
         resourceLoader.loadTexture("spritesheets/character.png", ResourceLoader.PLAYER_SPRITESHEET);
         physics = new Physics(new Vector2(0, 0), true);
-
-        TmxMapLoader tmxMapLoader = new TmxMapLoader();
-        tiledMap = tmxMapLoader.load(gameState.getMapFilePath());
-
-        tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap,
-                1f / Float.parseFloat(tiledMap.getProperties().get("tilewidth").toString()));
+        map = new Map(gameState.getMapFilePath(), physics);
         player = createPlayer(gameState.getCharacterPosition());
         game.getCamera().following = player;
 
         touchpad = createTouchpad();
         stage.addActor(touchpad);
-
-        MapCollisionBuilder.buildShapes(tiledMap, 32, physics.getWorld());
+        createUIButtons();
 
         movement = createMovement();
 
@@ -103,8 +97,10 @@ public class OverworldScreen extends AbstractScreen {
 
         Skin touchpadSkin = new Skin();
 
-        touchpadSkin.add(touchBackgroundId, new TextureRegion(resourceLoader.getTexture(ResourceLoader.UI_TEX), 335, 38, 35, 38));
-        touchpadSkin.add(touchKnobId, new TextureRegion(resourceLoader.getTexture(ResourceLoader.UI_TEX), 365, 483, 17, 17));
+        touchpadSkin.add(touchBackgroundId,
+                new TextureRegion(resourceLoader.getTexture(ResourceLoader.UI_TEX), 335, 38, 35, 38));
+        touchpadSkin.add(touchKnobId,
+                new TextureRegion(resourceLoader.getTexture(ResourceLoader.UI_TEX), 365, 483, 17, 17));
 
         Touchpad.TouchpadStyle touchpadStyle = new Touchpad.TouchpadStyle();
         Drawable touchBackground = touchpadSkin.getDrawable(touchBackgroundId);
@@ -114,6 +110,19 @@ public class OverworldScreen extends AbstractScreen {
         Touchpad tpad = new Touchpad(10, touchpadStyle);
         tpad.setBounds(15, 15, 150, 150);
         return tpad;
+    }
+
+    private void createUIButtons() {
+        ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
+        style.imageUp = new TextureRegionDrawable(
+                new TextureRegion(resourceLoader.getTexture(ResourceLoader.UI_TEX), 290, 0, 45, 49)
+        );
+        style.imageDown = new TextureRegionDrawable(
+                new TextureRegion(resourceLoader.getTexture(ResourceLoader.UI_TEX), 290, 139, 45, 45)
+        );
+        ImageButton actionButton = new ImageButton(style);
+        actionButton.setPosition(stage.getWidth() - actionButton.getWidth() - 50, 50);
+        stage.addActor(actionButton);
     }
 
     private ComponentMovement createMovement() {
@@ -134,11 +143,17 @@ public class OverworldScreen extends AbstractScreen {
     @Override
     public void draw(SpriteBatch spriteBatch) {
         game.getCamera().loadToBatch(spriteBatch);
-        tiledMapRenderer.setView(game.getCamera().getCamera());
-        tiledMapRenderer.render();
+        map.renderBelowEntities(game.getCamera().getCamera());
         spriteBatch.begin();
+
+        FringeLayer fringeLayer = map.getFringeLayer();
+        fringeLayer.begin();
+        fringeLayer.renderTill(spriteBatch, player.getY());
         player.getView().draw(spriteBatch, player, Gdx.graphics.getDeltaTime());
+        fringeLayer.end(spriteBatch);
+
         spriteBatch.end();
+        map.renderAboveEntities(game.getCamera().getCamera());
         drawHUD(spriteBatch);
 
         debugRenderer.render(physics.getWorld(), game.getCamera().getCamera().combined);
@@ -177,6 +192,6 @@ public class OverworldScreen extends AbstractScreen {
 
     @Override
     public void dispose() {
-        tiledMap.dispose();
+        map.dispose();
     }
 }

@@ -1,24 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="49" height="49" tilewidth="32" tileheight="32" nextobjectid="12">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="49" height="49" tilewidth="32" tileheight="32" nextobjectid="46">
  <tileset firstgid="1" name="tile_a2" tilewidth="32" tileheight="32">
   <image source="../spritesheets/tile_a2.png" width="512" height="384"/>
  </tileset>
  <tileset firstgid="193" name="tile_b" tilewidth="32" tileheight="32">
   <image source="../spritesheets/tile_b.png" width="512" height="512"/>
  </tileset>
- <layer name="ground" width="49" height="49">
+ <tileset firstgid="449" name="tile_a4" tilewidth="32" tileheight="32">
+  <image source="../spritesheets/tile_a4.png" width="512" height="480"/>
+ </tileset>
+ <layer name="Ground" width="49" height="49">
   <data encoding="base64" compression="zlib">
    eJztw0ENAAAMA6Grf9PzsDckrJqqqqqqqqqqqqqvBzAYCWI=
   </data>
  </layer>
- <layer name="nature" width="49" height="49">
+ <layer name="NatureBelow" width="49" height="49">
   <data encoding="base64" compression="zlib">
-   eJztmEGKwkAQRTs4MO4Vxr2C3kAPq8McIDoewNGr2Y1pKIskVuMoL1AfPrXJ4j9/dYI9CSF8FHgaeBq9+Pl3yBkYcgaGnIGh0kzzcP+9WPx7onI9+7sSenEGhpyBIT8PDAb9vi814fvwWYUwrh5PspYx37q6zVXPJHPk/GluOiadw9JD5plBGbwHhiw9kPMnteVPeb/UJKttj9Leb6N30d/w/EldPdTR++jDABh0D3lv6mYemz6kad3o907eod+enLRudP6+7Fk0BnmOa2M2GoM+xxbRGLwHhrwHhrwHhmQPp+jLAL9xuYeSfaIx5B5K9onGoHuw7BONQfZg5aAxyB70+f5rrHl+YAyyB/l/Tt5TSp7kM4xh6PeUSZZ7GTqHpQd6H5Ye6PdkV4oqTPY=
+   eJztmEtKxEAYhLujoIIrFXzuFHyDCI4Krtz52Lj0cQb1BOpBVDxAfBxAnTPpCayfSeNvm7QZxFgdUlD0ZCaB+qa6k5keNsb0duERw6eePz6/CjUMHKoLw7L9PF6x34/989kkmTZVzi28HlDHg5Ew7CDnLrwH78Pj8AQ8CU9FwnCInEfwMXwCz8ML8CK8JAyKY9p8fV7M/EdoT7/9Xhl6aRg4VCeGU6zbM/gCvoSv4HMbvJRGzXrgYPDv992a4fnQhznfb38emTWLfOu2M84FRmYOl1/GjYKRnaNMD45njJSh6YFDZXpgzi/Kyy95R72RWXnzSOb9NXwD35LnFxX1kML38EMEDH4Pbt6k2fiU9aHN1o1/33Fz6DGQk60bP39R9iH1PhuDXsdpyWxsDP461loruIaNIdRDK7MvNoZQD6IYGOq+HorExlDHHlZNxyGxMegenuG2jY/B9aDnkzCEfnNrhhYBj+uhm/nE3oObTwf4bLvgGsfA0IFI95C3LvL6YO7BX98vmdte5rsAwxs+e6+YUfeg/8/pfUrNI34NZLSJMUlSXX5R7PuUojL7MuwcZXpg76NMD+z7ZB9Delpj
   </data>
  </layer>
- <objectgroup name="collision">
-  <object id="11" x="416" y="0">
-   <polyline points="0,0 0,256 128,256 128,352 96,352 96,288 -32,288 -32,32 -384,32 -384,512 96,512 96,448 128,448 128,544 -96,544 -96,576 -32,640 -64,672 -32,704 -128,800 -128,864 32,864 32,1376 0,1376 0,896 -128,896 -160,864 -160,832 -192,832 -192,896 -224,928 -256,928 -288,960 -288,1216 -256,1248 -256,1312 -224,1344 -192,1376 -128,1376 -96,1408 32,1408 32,1440 -128,1440 -32,1536 -32,1568 1152,1568 1152,0 0,0"/>
+ <layer name="Fringe" width="49" height="49">
+  <data encoding="base64" compression="zlib">
+   eJztwTEBAAAAwqD1T20Hb6AAAAAAAAAAAAB4DSWEAAE=
+  </data>
+ </layer>
+ <layer name="NatureTop" width="49" height="49">
+  <data encoding="base64" compression="zlib">
+   eJzt2TsKhFAMheGkUkZ8bGB0KsuZXve/AN2BrsRTCiIICk7k/+DATXfCLWMGXCd3s0Iplcq3cwRv9ayVRvn4do7iq64/358j6NS3X3V+6Z0F2wEAAAAAAAAAAPy3xM3SA/eHlhvF7Z76B4P2GoPvNqn/HHwHADhrAYAJBo4=
+  </data>
+ </layer>
+ <objectgroup name="Collision">
+  <object id="11" name="border" x="416" y="0">
+   <polyline points="0,0 0,256 128,256 128,352 96,352 96,288 -32,288 -32,32 -384,32 -384,512 96,512 96,448 128,448 128,544 -128,544 -96,576 -32,640 -64,672 -32,704 -128,800 -128,864 32,864 32,1376 0,1376 0,896 -128,896 -160,864 -160,832 -192,832 -192,896 -224,928 -256,928 -288,960 -288,1216 -256,1248 -256,1312 -224,1344 -192,1376 -128,1376 -96,1408 32,1408 32,1440 -128,1440 -32,1536 -32,1568 1152,1568 1152,0 0,0"/>
   </object>
+  <object id="30" x="192" y="1248" width="64" height="32"/>
+  <object id="31" x="480" y="1312" width="32" height="32"/>
+  <object id="32" x="512" y="1248" width="32" height="32"/>
+  <object id="34" x="320" y="928" width="32" height="32"/>
+  <object id="35" x="64" y="416" width="32" height="32"/>
+  <object id="36" x="224" y="416" width="32" height="32"/>
+  <object id="39" x="224" y="425">
+   <polyline points="0,0 -127,0"/>
+  </object>
+  <object id="42" x="288" y="160">
+   <polyline points="0,0 -32,0 -32,64 -64,96 -96,64 -96,0 -160,0 -160,64 -192,96 -224,64 -224,0 -256,0 -256,128 -224,96 -160,96 -128,128 -96,96 -32,96 0,128 0,0"/>
+  </object>
+  <object id="44" x="288" y="256" width="32" height="32"/>
+  <object id="45" x="640" y="1376" width="64" height="64"/>
  </objectgroup>
 </map>

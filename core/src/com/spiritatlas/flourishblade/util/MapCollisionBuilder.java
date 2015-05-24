@@ -5,6 +5,7 @@ import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.*;
 import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.Ellipse;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
@@ -16,7 +17,7 @@ public class MapCollisionBuilder {
 
     public static Array<Body> buildShapes(Map map, float pixels, World world) {
         ppt = pixels;
-        MapObjects objects = map.getLayers().get("collision").getObjects();
+        MapObjects objects = map.getLayers().get("Collision").getObjects();
 
         Array<Body> bodies = new Array<Body>();
 
@@ -36,6 +37,9 @@ public class MapCollisionBuilder {
                 shape = getPolyline((PolylineMapObject) object);
             } else if (object instanceof CircleMapObject) {
                 shape = getCircle((CircleMapObject) object);
+            } else if (object instanceof EllipseMapObject) {
+                // Force all Ellipses into circles
+                shape = getCircle((EllipseMapObject) object);
             } else {
                 continue;
             }
@@ -69,6 +73,15 @@ public class MapCollisionBuilder {
         CircleShape circleShape = new CircleShape();
         circleShape.setRadius(circle.radius / ppt);
         circleShape.setPosition(new Vector2(circle.x / ppt, circle.y / ppt));
+        return circleShape;
+    }
+
+    private static CircleShape getCircle(EllipseMapObject ellipseObject) {
+        Ellipse ellipse = ellipseObject.getEllipse();
+        CircleShape circleShape = new CircleShape();
+        circleShape.setRadius(ellipse.height / 2 / ppt);
+        circleShape.setPosition(new Vector2((ellipse.x + ellipse.width / 2) / ppt,
+                (ellipse.y + ellipse.height / 2) / ppt));
         return circleShape;
     }
 
