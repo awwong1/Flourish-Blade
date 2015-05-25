@@ -1,6 +1,7 @@
 package com.spiritatlas.flourishblade.util;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Disposable;
@@ -9,6 +10,8 @@ public class Physics implements ContactListener, Disposable {
 
     protected final World world;
     public float timescale = 1f;
+    private boolean haveEvent = false;
+    private MapProperties mapProperties;
 
     public Physics(Vector2 gravity, boolean sleep) {
         world = new World(gravity, sleep);
@@ -32,76 +35,26 @@ public class Physics implements ContactListener, Disposable {
         world.dispose();
     }
 
-    public Body createBox(BodyDef.BodyType type, float width, float height, float density) {
-        BodyDef def = new BodyDef();
-        def.type = type;
-        Body body = world.createBody(def);
-
-        PolygonShape shape = new PolygonShape();
-        shape.setAsBox(width, height);
-        body.createFixture(shape, density);
-        shape.dispose();
-
-        return body;
-    }
-
-    public Body createCircle(BodyDef.BodyType type, float radius, float density) {
-        BodyDef def = new BodyDef();
-        def.type = type;
-        Body body = world.createBody(def);
-
-        CircleShape shape = new CircleShape();
-        shape.setRadius(radius);
-        body.createFixture(shape, density);
-        shape.dispose();
-        MassData mass = new MassData();
-        mass.mass = 1000f;
-        body.setMassData(mass);
-
-        return body;
-    }
-
-    public Body createEdge(BodyDef.BodyType type, float x0, float y0, float x1, float y1, float density) {
-        BodyDef def = new BodyDef();
-        def.type = type;
-        Body body = world.createBody(def);
-
-        EdgeShape shape = new EdgeShape();
-        shape.set(new Vector2(0, 0), new Vector2(x1 - x0, y1 - y0));
-        FixtureDef fdef = new FixtureDef();
-        fdef.shape = shape;
-        fdef.friction = 1;
-        fdef.density = density;
-        body.createFixture(fdef);
-        body.setTransform(x0, y0, 0);
-        shape.dispose();
-
-        return body;
-    }
-
-    public Body createPolygon(BodyDef.BodyType type, float x, float y, Vector2[] vertices, float density) {
-        BodyDef def = new BodyDef();
-        def.type = type;
-        Body body = world.createBody(def);
-
-        PolygonShape shape = new PolygonShape();
-        shape.set(vertices);
-        FixtureDef fdef = new FixtureDef();
-        fdef.shape = shape;
-        fdef.friction = 1;
-        fdef.density = density;
-        body.createFixture(fdef);
-        body.setTransform(x, y, 0f);
-        shape.dispose();
-
-        return body;
-    }
-
     /* (non-Javadoc)
      * @see com.badlogic.gdx.physics.box2d.ContactListener#beginContact(com.badlogic.gdx.physics.box2d.Contact)
      */
     @Override
     public void beginContact(Contact c) {
+        Fixture fa = c.getFixtureA();
+        Fixture fb = c.getFixtureB();
+
+        if (fa == null || fb == null) {
+            return;
+        }
+        Gdx.app.log("Physics", fa.toString() + ", " + fb.toString());
+        if (fa.getUserData() != null) {
+            haveEvent = true;
+            mapProperties = (MapProperties) fa.getUserData();
+        }
+        if (fb.getUserData() != null) {
+            haveEvent = true;
+            mapProperties = (MapProperties) fb.getUserData();
+        }
     }
 
     /* (non-Javadoc)
@@ -109,6 +62,20 @@ public class Physics implements ContactListener, Disposable {
      */
     @Override
     public void endContact(Contact c) {
+        Fixture fa = c.getFixtureA();
+        Fixture fb = c.getFixtureB();
+
+        if (fa == null || fb == null) {
+            return;
+        }
+        if (fa.getUserData() != null) {
+            haveEvent = false;
+            mapProperties = null;
+        }
+        if (fb.getUserData() != null) {
+            haveEvent = false;
+            mapProperties = null;
+        }
     }
 
     /* (non-Javadoc)
@@ -135,6 +102,14 @@ public class Physics implements ContactListener, Disposable {
         if (obj instanceof Collidable) {
             ((Collidable) obj).collide(other, c, m);
         }
+    }
+
+    public boolean isHaveEvent() {
+        return haveEvent;
+    }
+
+    public MapProperties getMapProperties() {
+        return mapProperties;
     }
 
 }

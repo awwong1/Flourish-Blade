@@ -9,6 +9,7 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
 import com.spiritatlas.flourishblade.util.MapCollisionBuilder;
+import com.spiritatlas.flourishblade.util.MapEventBuilder;
 import com.spiritatlas.flourishblade.util.Physics;
 
 public class Map implements Disposable {
@@ -52,6 +53,7 @@ public class Map implements Disposable {
             }
         }
         MapCollisionBuilder.buildShapes(map, 32, physics.getWorld());
+        MapEventBuilder.buildShapes(map, 32, physics.getWorld());
     }
 
     private void fillCounting(int start, int[] array) {
@@ -93,5 +95,12 @@ public class Map implements Disposable {
             map.dispose();
             disposed = true;
         }
+    }
+
+    public String getPropertyValue(String key) {
+        if (map.getProperties().containsKey(key)) {
+            return String.valueOf(map.getProperties().get(key));
+        }
+        return "";
     }
 }

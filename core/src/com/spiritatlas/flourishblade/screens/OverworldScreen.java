@@ -1,10 +1,12 @@
 package com.spiritatlas.flourishblade.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -23,6 +25,8 @@ import com.spiritatlas.flourishblade.entities.PlayerEntity;
 import com.spiritatlas.flourishblade.handlers.GameState;
 import com.spiritatlas.flourishblade.util.*;
 
+import java.util.Iterator;
+
 public class OverworldScreen extends AbstractScreen {
     private final ResourceLoader resourceLoader;
     private final Physics physics;
@@ -32,6 +36,8 @@ public class OverworldScreen extends AbstractScreen {
 
     private final Touchpad touchpad;
     private final ComponentMovement movement;
+
+    private Music mapMusic;
 
     // TODO: Remove this from the final game
     public final Box2DDebugRenderer debugRenderer;
@@ -44,6 +50,15 @@ public class OverworldScreen extends AbstractScreen {
         map = new Map(gameState.getMapFilePath(), physics);
         player = createPlayer(gameState.getCharacterPosition());
         game.getCamera().following = player;
+
+        String music = map.getPropertyValue("bgm");
+        if (!music.equals("")) {
+            resourceLoader.loadMusic(music, ResourceLoader.DYNAMIC_MAP_MUSIC);
+            mapMusic = resourceLoader.getMusic(ResourceLoader.DYNAMIC_MAP_MUSIC);
+            mapMusic.setVolume(game.getGameSettings().getBgmVolume());
+            mapMusic.setLooping(true);
+            mapMusic.play();
+        }
 
         touchpad = createTouchpad();
         stage.addActor(touchpad);
@@ -122,9 +137,29 @@ public class OverworldScreen extends AbstractScreen {
         style.imageDown = new TextureRegionDrawable(
                 new TextureRegion(resourceLoader.getTexture(ResourceLoader.UI_TEX), 290, 139, 45, 45)
         );
-        ImageButton actionButton = new ImageButton(style);
+        final ImageButton actionButton = new ImageButton(style);
         actionButton.addListener(new InputListener(){
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+                if (physics.isHaveEvent()) {
+                    Gdx.app.log("Event Handler", "Has Event!!");
+                    MapProperties mapProperties = physics.getMapProperties();
+                    Iterator it = mapProperties.getKeys();
+                    // TODO: Remove this while print statement
+                    while (it.hasNext()) {
+                        String tempKey = (String) it.next();
+                        Gdx.app.log("OverworldScreen", "K: " + tempKey + ", " +
+                                "V: " + String.valueOf(mapProperties.get(tempKey)));
+                    }
+                    String actionType = String.valueOf(mapProperties.get("action"));
+                    // TODO: Add some other action handler stuff
+                    if (actionType.equals("dialog")) {
+                        String dialogText = String.valueOf(mapProperties.get("text"));
+                        game.pushScreen(new DialogScreen(resourceLoader, game, dialogText));
+                    }
+
+                } else {
+                    Gdx.app.log("Event Handler", "No event!!");
+                }
                 return false;
             }
         });
@@ -202,5 +237,8 @@ public class OverworldScreen extends AbstractScreen {
         map.dispose();
         resourceLoader.removeTexture(ResourceLoader.PLAYER_SPRITESHEET);
         resourceLoader.removeTexture(ResourceLoader.PLAYER_SWORD);
+        if (mapMusic != null){
+            resourceLoader.removeMusic(ResourceLoader.DYNAMIC_MAP_MUSIC);
+        }
     }
 }

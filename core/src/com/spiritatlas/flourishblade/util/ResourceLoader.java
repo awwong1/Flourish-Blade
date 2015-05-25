@@ -27,6 +27,9 @@ public class ResourceLoader {
     public static final String PLAYER_SPRITESHEET = "player_spritesheet";
     public static final String PLAYER_SWORD = "player_sword";
 
+    // Dynamic per map
+    public static final String DYNAMIC_MAP_MUSIC = "map_music";
+
 
     private ObjectMap<String, Texture> textures;
     private ObjectMap<String, Music> musics;
