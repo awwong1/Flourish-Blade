@@ -135,6 +135,14 @@ public class FlourishBlade extends Game implements InputProcessor {
         return popped;
     }
 
+    public AbstractScreen removeSecondPoppedScreen() {
+        AbstractScreen popped = screens.pop();
+        AbstractScreen poppedDeux = screens.pop();
+        poppedDeux.dispose();
+        screens.add(popped);
+        return poppedDeux;
+    }
+
     public void pushScreen(AbstractScreen screen) {
         screens.add(screen);
     }

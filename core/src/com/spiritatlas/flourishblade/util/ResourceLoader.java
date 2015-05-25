@@ -25,6 +25,7 @@ public class ResourceLoader {
 
     // Player Spritesheet
     public static final String PLAYER_SPRITESHEET = "player_spritesheet";
+    public static final String PLAYER_SWORD = "player_sword";
 
 
     private ObjectMap<String, Texture> textures;

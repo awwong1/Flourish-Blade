@@ -7,6 +7,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -121,6 +123,11 @@ public class OverworldScreen extends AbstractScreen {
                 new TextureRegion(resourceLoader.getTexture(ResourceLoader.UI_TEX), 290, 139, 45, 45)
         );
         ImageButton actionButton = new ImageButton(style);
+        actionButton.addListener(new InputListener(){
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+                return false;
+            }
+        });
         actionButton.setPosition(stage.getWidth() - actionButton.getWidth() - 50, 50);
         stage.addActor(actionButton);
     }
@@ -193,5 +200,7 @@ public class OverworldScreen extends AbstractScreen {
     @Override
     public void dispose() {
         map.dispose();
+        resourceLoader.removeTexture(ResourceLoader.PLAYER_SPRITESHEET);
+        resourceLoader.removeTexture(ResourceLoader.PLAYER_SWORD);
     }
 }

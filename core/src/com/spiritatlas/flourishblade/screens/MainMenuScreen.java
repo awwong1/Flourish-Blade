@@ -95,8 +95,7 @@ public class MainMenuScreen extends AbstractScreen {
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 resourceLoader.getSound(ResourceLoader.CLICK).play(game.getGameSettings().getSfxVolume());
                 resourceLoader.getMusic(ResourceLoader.MUSIC_MAIN_THEME).stop();
-                game.popScreen();
-                game.pushScreen(new OverworldScreen(resourceLoader, game, new GameState()));
+                game.pushScreen(new FadeOutScreen(game, new OverworldScreen(resourceLoader, game, new GameState())));
             }
         });
 
