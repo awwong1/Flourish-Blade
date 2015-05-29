@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="49" height="49" tilewidth="32" tileheight="32" nextobjectid="48">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="49" height="49" tilewidth="32" tileheight="32" nextobjectid="52">
  <properties>
   <property name="bgm" value="bgm/test_theme.wav"/>
  </properties>
@@ -12,14 +12,22 @@
  <tileset firstgid="449" name="tile_a4" tilewidth="32" tileheight="32">
   <image source="../spritesheets/tile_a4.png" width="512" height="480"/>
  </tileset>
+ <tileset firstgid="689" name="tile_c" tilewidth="32" tileheight="32">
+  <image source="../spritesheets/tile_c.png" width="512" height="512"/>
+ </tileset>
  <layer name="Ground" width="49" height="49">
   <data encoding="base64" compression="zlib">
    eJztw0ENAAAMA6Grf9PzsDckrJqqqqqqqqqqqqqvBzAYCWI=
   </data>
  </layer>
+ <layer name="HouseWall" width="49" height="49">
+  <data encoding="base64" compression="zlib">
+   eJzt0SEOACAMBMEWD///LASFwIGqmUnOb3IRAAAAAFBv5r2V1UX/ers3WnXRv9PtBwAAAIB3G4irCKo=
+  </data>
+ </layer>
  <layer name="NatureBelow" width="49" height="49">
   <data encoding="base64" compression="zlib">
-   eJztmEtKxEAYhLujoIIrFXzuFHyDCI4Krtz52Lj0cQb1BOpBVDxAfBxAnTPpCayfSeNvm7QZxFgdUlD0ZCaB+qa6k5keNsb0duERw6eePz6/CjUMHKoLw7L9PF6x34/989kkmTZVzi28HlDHg5Ew7CDnLrwH78Pj8AQ8CU9FwnCInEfwMXwCz8ML8CK8JAyKY9p8fV7M/EdoT7/9Xhl6aRg4VCeGU6zbM/gCvoSv4HMbvJRGzXrgYPDv992a4fnQhznfb38emTWLfOu2M84FRmYOl1/GjYKRnaNMD45njJSh6YFDZXpgzi/Kyy95R72RWXnzSOb9NXwD35LnFxX1kML38EMEDH4Pbt6k2fiU9aHN1o1/33Fz6DGQk60bP39R9iH1PhuDXsdpyWxsDP461loruIaNIdRDK7MvNoZQD6IYGOq+HorExlDHHlZNxyGxMegenuG2jY/B9aDnkzCEfnNrhhYBj+uhm/nE3oObTwf4bLvgGsfA0IFI95C3LvL6YO7BX98vmdte5rsAwxs+e6+YUfeg/8/pfUrNI34NZLSJMUlSXX5R7PuUojL7MuwcZXpg76NMD+z7ZB9Delpj
+   eJztmElKA0EYhasSQQXdqOC8UnAMiGBUcOXOYePS4QzqCZw9gNMuii7ctcMB1JxJT+Ar0oV/yu5KNWLl76YffFQ6ScN7eX+lk+4WQrQkoEfwU/Gf3+9DeQYeykqGkvw5npG/j833c5PytEh8LuFxOznuSEmGFfhcBWtgHfSDATAIhlKSYRM+t8A22AETYBJMgWmVgeQYEfXXi9FmmDb018+VQy95Bh7KUoZd7Ns9cAAOwRHYl9ZT2SjfDzwymN/3SeFwfWjFzLfJxitnjcHfvKyt45aVcw7tX60LMSv3HC496Dx9TDPkPfCQSw8u/o9xoTgBp+AMnHu8cET5V357jbWRLuD5ElyBa3DjMUPUHKm5r4BbcOc4Pw/wPBz6Vusjgx4C8ASeE+yBUrF+9SWzBz03Qbi+hn1QbN10NuEHlPm9o2foxeIzSTc+ZPqP895FnueWge7jwNEbtwzmPqaaizmHWwZbD+UQU9wy2HpQSkOGrO+HOHHLkMUeZkUNm7hloD28gapMXwbdA50nlcH2m5tmKDPIo3tIMk/ce9DztIHXlmPO0Rk4dKBEe4jaF1F9cO7B3N/vIVXD870lwyde+/KckfZA/8/R+5Q0j+LD4lEWhCgU/PlXSvt9SiWX+zLcc7j0wL0Plx643+f7BjHRYes=
   </data>
  </layer>
  <layer name="Fringe" width="49" height="49">
@@ -29,7 +37,7 @@
  </layer>
  <layer name="NatureTop" width="49" height="49">
   <data encoding="base64" compression="zlib">
-   eJzt2TsKhFAMheGkUkZ8bGB0KsuZXve/AN2BrsRTCiIICk7k/+DATXfCLWMGXCd3s0Iplcq3cwRv9ayVRvn4do7iq64/358j6NS3X3V+6Z0F2wEAAAAAAAAAAPy3xM3SA/eHlhvF7Z76B4P2GoPvNqn/HHwHADhrAYAJBo4=
+   eJzt2ckJwmAUBOD3k4OiuDTgcvKod+1CbcCtALcCFC3AgwW4FaQdaCVOIIdgCMQFwsh8MJB3myHH30zkdwrOrIiUkLKL3gwq6FlFakjdRW8WTXRtufibQRt9O6HOOXznyTaIiIiIiCTR9cx6SN9Lu8ln/P5DZISMCXcMgv4zZI4sgh0Toh3ToH+Yv2NJtGGFruuXvhvcW6INO3Q9IqdQzsieaMMhpuuFaIOIiIjIuzLOLJvg/aGhN4rU/es/uGLXjXzbHf0f5BtERL71BGCVFg4=
   </data>
  </layer>
  <objectgroup name="Collision">
@@ -50,6 +58,9 @@
   </object>
   <object id="44" x="288" y="256" width="32" height="32"/>
   <object id="45" x="640" y="1376" width="64" height="64"/>
+  <object id="48" x="640" y="896">
+   <polyline points="0,0 -64,0 -64,-160 96,-160 96,0 32,0 32,-32 0,-32 0,0"/>
+  </object>
  </objectgroup>
  <objectgroup name="Event">
   <object id="46" name="sign" x="288" y="896" width="96" height="96">
@@ -58,6 +69,14 @@
     <property name="text" value="This is a test sign! If you can read this properly, then this sign works. Tap anywhere on the screen to continue!"/>
    </properties>
    <ellipse/>
+  </object>
+  <object id="50" name="housedoor" x="640" y="896" width="32">
+   <properties>
+    <property name="action" value="mapchange"/>
+    <property name="dest_x" value="5"/>
+    <property name="dest_y" value="1.5"/>
+    <property name="destmap" value="maps/testhouse.tmx"/>
+   </properties>
   </object>
  </objectgroup>
 </map>

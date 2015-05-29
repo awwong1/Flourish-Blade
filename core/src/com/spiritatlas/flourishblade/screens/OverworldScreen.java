@@ -22,7 +22,6 @@ import com.spiritatlas.flourishblade.FlourishBlade;
 import com.spiritatlas.flourishblade.entities.FringeLayer;
 import com.spiritatlas.flourishblade.entities.Map;
 import com.spiritatlas.flourishblade.entities.PlayerEntity;
-import com.spiritatlas.flourishblade.handlers.GameState;
 import com.spiritatlas.flourishblade.util.*;
 
 import java.util.Iterator;
@@ -42,17 +41,22 @@ public class OverworldScreen extends AbstractScreen {
     // TODO: Remove this from the final game
     public final Box2DDebugRenderer debugRenderer;
 
-    public OverworldScreen(final ResourceLoader resources, final FlourishBlade game, final GameState gameState) {
+    public OverworldScreen(final ResourceLoader resources, final FlourishBlade game) {
         super(new Stage(new FitViewport(FlourishBlade.V_WIDTH, FlourishBlade.V_HEIGHT)), game);
+        game.getGameState().saveGameState();
         this.resourceLoader = resources;
         resourceLoader.loadTexture("spritesheets/character.png", ResourceLoader.PLAYER_SPRITESHEET);
         physics = new Physics(new Vector2(0, 0), true);
-        map = new Map(gameState.getMapFilePath(), physics);
-        player = createPlayer(gameState.getCharacterPosition());
+        map = new Map(game.getGameState().getMapFilePath(), physics);
+        player = createPlayer(game.getGameState().getCharacterPosition());
         game.getCamera().following = player;
 
         String music = map.getPropertyValue("bgm");
         if (!music.equals("")) {
+            if (resourceLoader.isAnyMusicPlaying()) {
+                resourceLoader.stopAllMusic();
+                resourceLoader.removeMusic(ResourceLoader.DYNAMIC_MAP_MUSIC);
+            }
             resourceLoader.loadMusic(music, ResourceLoader.DYNAMIC_MAP_MUSIC);
             mapMusic = resourceLoader.getMusic(ResourceLoader.DYNAMIC_MAP_MUSIC);
             mapMusic.setVolume(game.getGameSettings().getBgmVolume());
@@ -142,18 +146,18 @@ public class OverworldScreen extends AbstractScreen {
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
                 if (physics.isHaveEvent()) {
                     Gdx.app.log("Event Handler", "Has Event!!");
-                    MapProperties mapProperties = physics.getMapProperties();
-                    Iterator it = mapProperties.getKeys();
+                    MapProperties eventTileProperties = physics.getEventTileProperties();
+                    Iterator it = eventTileProperties.getKeys();
                     // TODO: Remove this while print statement
                     while (it.hasNext()) {
                         String tempKey = (String) it.next();
                         Gdx.app.log("OverworldScreen", "K: " + tempKey + ", " +
-                                "V: " + String.valueOf(mapProperties.get(tempKey)));
+                                "V: " + String.valueOf(eventTileProperties.get(tempKey)));
                     }
-                    String actionType = String.valueOf(mapProperties.get("action"));
+                    String actionType = String.valueOf(eventTileProperties.get("action"));
                     // TODO: Add some other action handler stuff
                     if (actionType.equals("dialog")) {
-                        String dialogText = String.valueOf(mapProperties.get("text"));
+                        String dialogText = String.valueOf(eventTileProperties.get("text"));
                         game.pushScreen(new DialogScreen(resourceLoader, game, dialogText));
                     }
 
@@ -175,6 +179,28 @@ public class OverworldScreen extends AbstractScreen {
 
     @Override
     public void tick(float delta) {
+        if (physics.isHaveEvent()) {
+            MapProperties eventTileProperties = physics.getEventTileProperties();
+            Iterator it = eventTileProperties.getKeys();
+            // TODO: Remove this while print statement
+            while (it.hasNext()) {
+                String tempKey = (String) it.next();
+                Gdx.app.log("OverworldScreen", "K: " + tempKey + ", " +
+                        "V: " + String.valueOf(eventTileProperties.get(tempKey)));
+            }
+            String actionType = String.valueOf(eventTileProperties.get("action"));
+            // TODO: Add some other action handler stuff
+            if (actionType.equals("mapchange")) {
+                String destMap = String.valueOf(eventTileProperties.get("destmap"));
+                float destX = Float.valueOf(eventTileProperties.get("dest_x").toString());
+                float destY = Float.valueOf(eventTileProperties.get("dest_y").toString());
+                //game.pushScreen(new DialogScreen(resourceLoader, game, dialogText));
+                game.getGameState().setMapFilePath(destMap);
+                game.getGameState().setCharacterPosition(new Vector2(destX, destY));
+                game.popScreen();
+                game.pushScreen(new OverworldScreen(resourceLoader, game));
+            }
+        }
         movement.setSteer(touchpad.getKnobPercentX(), touchpad.getKnobPercentY());
         movement.apply(player);
         physics.step(delta);
@@ -237,8 +263,5 @@ public class OverworldScreen extends AbstractScreen {
         map.dispose();
         resourceLoader.removeTexture(ResourceLoader.PLAYER_SPRITESHEET);
         resourceLoader.removeTexture(ResourceLoader.PLAYER_SWORD);
-        if (mapMusic != null){
-            resourceLoader.removeMusic(ResourceLoader.DYNAMIC_MAP_MUSIC);
-        }
     }
 }

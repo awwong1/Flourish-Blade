@@ -87,6 +87,26 @@ public class ResourceLoader {
         }
     }
 
+    public boolean isAnyMusicPlaying() {
+        Iterator it = musics.iterator();
+        while (it.hasNext()) {
+            ObjectMap.Entry pair = (ObjectMap.Entry) it.next();
+            boolean playing = ((Music) pair.value).isPlaying();
+            if (playing) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void stopAllMusic() {
+        Iterator it = musics.iterator();
+        while (it.hasNext()) {
+            ObjectMap.Entry pair = (ObjectMap.Entry) it.next();
+            ((Music) pair.value).stop();
+        }
+    }
+
     public void loadSound(String path, String key) {
         Sound sound = Gdx.audio.newSound(Gdx.files.internal(path));
         sounds.put(key, sound);

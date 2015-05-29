@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="10" height="10" tilewidth="32" tileheight="32" nextobjectid="4">
+ <properties>
+  <property name="bgm" value="bgm/test_house.wav"/>
+ </properties>
+ <tileset firstgid="1" name="tile_a3" tilewidth="32" tileheight="32">
+  <image source="../spritesheets/tile_a3.png" width="512" height="256"/>
+ </tileset>
+ <tileset firstgid="129" name="tile_a5" tilewidth="32" tileheight="32">
+  <image source="../spritesheets/tile_a5.png" width="256" height="512"/>
+ </tileset>
+ <tileset firstgid="257" name="tile_a4" tilewidth="32" tileheight="32">
+  <image source="../spritesheets/tile_a4.png" width="512" height="480"/>
+  <tile id="88">
+   <properties>
+    <property name="action" value="mapchange"/>
+    <property name="dest_x" value="20"/>
+    <property name="dest_y" value="21"/>
+    <property name="destmap" value="maps/testmap.tmx"/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer name="Ground" width="10" height="10">
+  <data encoding="base64" compression="zlib">
+   eJzLZmBgyCaAc4C4mghcA8QzRjFWjA4aoRgdAABRGjOR
+  </data>
+ </layer>
+ <layer name="Fringe" width="10" height="10">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFgwkAAAGQAAE=
+  </data>
+ </layer>
+ <layer name="HouseTop" width="10" height="10">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgF9ACRjKgYlzgAP2gC0Q==
+  </data>
+ </layer>
+ <objectgroup name="Collision">
+  <object id="1" x="0" y="64">
+   <polyline points="0,0 320,0 320,256 0,256 0,0"/>
+  </object>
+ </objectgroup>
+ <objectgroup name="Event">
+  <object id="2" name="door" x="128" y="288" width="64" height="32">
+   <properties>
+    <property name="action" value="mapchange"/>
+    <property name="dest_x" value="20.5"/>
+    <property name="dest_y" value="20.5"/>
+    <property name="destmap" value="maps/testmap.tmx"/>
+   </properties>
+  </object>
+ </objectgroup>
+</map>

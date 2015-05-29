@@ -11,7 +11,10 @@ public class Physics implements ContactListener, Disposable {
     protected final World world;
     public float timescale = 1f;
     private boolean haveEvent = false;
-    private MapProperties mapProperties;
+    private MapProperties eventTileProperties;
+
+    private Fixture fa;
+    private Fixture fb;
 
     public Physics(Vector2 gravity, boolean sleep) {
         world = new World(gravity, sleep);
@@ -40,8 +43,8 @@ public class Physics implements ContactListener, Disposable {
      */
     @Override
     public void beginContact(Contact c) {
-        Fixture fa = c.getFixtureA();
-        Fixture fb = c.getFixtureB();
+        fa = c.getFixtureA();
+        fb = c.getFixtureB();
 
         if (fa == null || fb == null) {
             return;
@@ -49,11 +52,11 @@ public class Physics implements ContactListener, Disposable {
         Gdx.app.log("Physics", fa.toString() + ", " + fb.toString());
         if (fa.getUserData() != null) {
             haveEvent = true;
-            mapProperties = (MapProperties) fa.getUserData();
+            eventTileProperties = (MapProperties) fa.getUserData();
         }
         if (fb.getUserData() != null) {
             haveEvent = true;
-            mapProperties = (MapProperties) fb.getUserData();
+            eventTileProperties = (MapProperties) fb.getUserData();
         }
     }
 
@@ -62,19 +65,19 @@ public class Physics implements ContactListener, Disposable {
      */
     @Override
     public void endContact(Contact c) {
-        Fixture fa = c.getFixtureA();
-        Fixture fb = c.getFixtureB();
+        fa = c.getFixtureA();
+        fb = c.getFixtureB();
 
         if (fa == null || fb == null) {
             return;
         }
         if (fa.getUserData() != null) {
             haveEvent = false;
-            mapProperties = null;
+            eventTileProperties = null;
         }
         if (fb.getUserData() != null) {
             haveEvent = false;
-            mapProperties = null;
+            eventTileProperties = null;
         }
     }
 
@@ -108,8 +111,7 @@ public class Physics implements ContactListener, Disposable {
         return haveEvent;
     }
 
-    public MapProperties getMapProperties() {
-        return mapProperties;
+    public MapProperties getEventTileProperties() {
+        return eventTileProperties;
     }
-
 }

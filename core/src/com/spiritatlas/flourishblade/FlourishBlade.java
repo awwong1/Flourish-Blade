@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.spiritatlas.flourishblade.handlers.GameSettings;
+import com.spiritatlas.flourishblade.handlers.GameState;
 import com.spiritatlas.flourishblade.screens.AbstractScreen;
 import com.spiritatlas.flourishblade.screens.SplashScreen;
 import com.spiritatlas.flourishblade.util.FollowingCamera;
@@ -37,6 +38,7 @@ public class FlourishBlade extends Game implements InputProcessor {
     private Stack<AbstractScreen> screens;
     private Stack<AbstractScreen> drawStack;
     private GameSettings gameSettings;
+    private GameState gameState;
     private Texture whitePixelTexture;
 
     @Override
@@ -45,6 +47,7 @@ public class FlourishBlade extends Game implements InputProcessor {
         screens = new Stack<AbstractScreen>();
         drawStack = new Stack<AbstractScreen>();
         gameSettings = GameSettings.loadSettings();
+        gameState = GameState.loadGameState();
         createWhitePixelTexture();
         setupCameras();
         handleResources();
@@ -161,6 +164,14 @@ public class FlourishBlade extends Game implements InputProcessor {
 
     public GameSettings getGameSettings() {
         return gameSettings;
+    }
+
+    public void setGameState(GameState gameState) {
+        this.gameState = gameState;
+    }
+
+    public GameState getGameState() {
+        return gameState;
     }
 
     /* Input methods, refer to the top screen in the screens stack. */
