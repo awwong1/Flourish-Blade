@@ -1,6 +1,6 @@
 # Flourish-Blade
 
-![Flourish Blade Screenshot](https://github.com/awwong1/Flourish-Blade/screenshot.png "Flourish Blade Screenshot Demo")
+![Flourish Blade Screenshot](/screenshot.png "Flourish Blade Screenshot Demo")
 
 LibGDX 1.6.0 Top Down Game
 
